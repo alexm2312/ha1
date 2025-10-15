@@ -90,5 +90,32 @@ class CalculatorTest {
 
 
     //TODO hier weitere Tests erstellen
+    @Test 
+    @DisplayName("should Display result %")
+    void perCentage() {
+
+       Calculator calc = new Calculator();
+
+        calc.pressDigitKey(1);
+        calc.pressDigitKey(0);
+        calc.pressDigitKey(0);
+        calc.pressUnaryOperationKey("%");
+
+        String expected = "1.0";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    @DisplayName("")
+    void (){
+
+    }
+
+
+
+
 }
 
