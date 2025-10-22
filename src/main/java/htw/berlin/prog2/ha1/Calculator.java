@@ -14,6 +14,9 @@ public class Calculator {
 
     private String latestOperation = "";
 
+    private boolean operatorJustPressed = false; 
+    private boolean clearPressedOnce = false;  
+
     /**
      * @return den aktuellen Bildschirminhalt als String
      */
@@ -31,7 +34,12 @@ public class Calculator {
     public void pressDigitKey(int digit) {
         if(digit > 9 || digit < 0) throw new IllegalArgumentException();
 
-        if(screen.equals("0") || latestValue == Double.parseDouble(screen)) screen = "";
+        if (!screen.isEmpty() && (screen.equals("0") || latestValue == Double.parseDouble(screen))) {
+            screen = "";
+        }
+
+
+        clearPressedOnce = false;
 
         screen = screen + digit;
     }
@@ -45,10 +53,24 @@ public class Calculator {
      * im Ursprungszustand ist.
      */
     public void pressClearKey() {
+    if (!clearPressedOnce) {
+        // einmaliges Drücken: nur Bildschirm löschen, intern gespeicherte Werte behalten
+        screen = "0";
+        clearPressedOnce = true;
+        // Operation / latestValue bleiben unverändert
+    } else {
+        // zweimaliges Drücken: alles zurücksetzen (Urzustand)
         screen = "0";
         latestOperation = "";
         latestValue = 0.0;
+        clearPressedOnce = false;
+        operatorJustPressed = false;
     }
+    
+    operatorJustPressed = false;
+
+}
+
 // Unterschied nr.1: nach der Eingabe eines zweiten Werts, kommt beim online Calculator nicht direkt das zwischenergebnis. Es wird nur der zweite eingegebene Operant angezeigt. Es wird auf das '=' gewartet.
 // Unterschied nr.2: wird ein Operant ausgewählt, so sieht man beim online Calculator farblich markiert die letzte Operanten Auswahl. 
     /**
@@ -63,6 +85,8 @@ public class Calculator {
     public void pressBinaryOperationKey(String operation)  {
         latestValue = Double.parseDouble(screen);
         latestOperation = operation;
+        operatorJustPressed = true;
+        clearPressedOnce = false;
     }
 
     /**
@@ -119,6 +143,10 @@ public class Calculator {
      * und das Ergebnis direkt angezeigt.
      */
     public void pressEqualsKey() {
+
+        if (latestOperation == null || latestOperation.isEmpty()) {
+            return; // keine Operation -> nichts tun
+        }
 
         // Überprüfung ob zwei Operatoren vorhanden sind.
          if (latestOperation != null && latestValue == Double.parseDouble(screen)) {

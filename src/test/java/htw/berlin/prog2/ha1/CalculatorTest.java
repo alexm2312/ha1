@@ -133,7 +133,7 @@ class CalculatorTest {
         // Aufgabe b.3.2
     // Erwartet wäre, das er 4 + 3 rechnet. Allerdings ist nach der pressClearKey Eingabe das attribut "latestOperation" leer, wodurch er bei der methode pressEqualsKey in den default case geht und IllegalArgumentException ausgibt.
     @Test
-    @DisplayName("should only only delete last digit and set screen to 0")
+    @DisplayName("should only delete last digit and set screen to 0")
     void oneTimeClearDeletion() {
 
         Calculator calc = new Calculator();
