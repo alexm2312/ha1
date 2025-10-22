@@ -119,6 +119,13 @@ public class Calculator {
      * und das Ergebnis direkt angezeigt.
      */
     public void pressEqualsKey() {
+
+        // Überprüfung ob zwei Operatoren vorhanden sind.
+         if (latestOperation != null && latestValue == Double.parseDouble(screen)) {
+        
+        //Return trotz void methode --> geht weil return ein methode auch einfach beenden kann.
+        return;
+    }
         var result = switch(latestOperation) {
             case "+" -> latestValue + Double.parseDouble(screen);
             case "-" -> latestValue - Double.parseDouble(screen);
