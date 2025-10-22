@@ -89,7 +89,8 @@ class CalculatorTest {
     }
 
 
-    //TODO hier weitere Tests erstellen
+    //TODO hier weitere Tests erstellen 
+        // Aufgabe b.2 
     @Test 
     @DisplayName("should Display result %")
     void perCentage() {
@@ -108,14 +109,49 @@ class CalculatorTest {
 
     }
 
+    // Aufgabe b.3.1
+    // Der Online Taschenrechner macht zwar das gleiche, aber ich orientiere mich nach unserem Taschenrechner Code und empfinde das Verhalten als Bug. Meine Taschenrechner zuhause haben Error angezeigt wenn ich das versucht habe.
     @Test
-    @DisplayName("")
-    void (){
+    @DisplayName("should still display the first operator if you enter after using only one operator for a binary calculation")
+    void calcWithoutSecondOperator() {
+
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(4);
+        calc.pressBinaryOperationKey("+");
+        calc.pressEqualsKey();
+
+        
+        String expected = "4";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
 
     }
 
 
+        // Aufgabe b.3.2
+    // Erwartet wäre, das er 4 + 3 rechnet. Allerdings ist nach der pressClearKey Eingabe das attribut "latestOperation" leer, wodurch er bei der methode pressEqualsKey in den default case geht und IllegalArgumentException ausgibt.
+    @Test
+    @DisplayName("should only only delete last digit and set screen to 0")
+    void oneTimeClearDeletion() {
 
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(4);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(5);
+        calc.pressClearKey();
+        calc.pressDigitKey(3);
+        calc.pressEqualsKey();
+
+        
+        String expected = "7";
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+
+    }
 
 }
 

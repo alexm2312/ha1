@@ -49,7 +49,8 @@ public class Calculator {
         latestOperation = "";
         latestValue = 0.0;
     }
-
+// Unterschied nr.1: nach der Eingabe eines zweiten Werts, kommt beim online Calculator nicht direkt das zwischenergebnis. Es wird nur der zweite eingegebene Operant angezeigt. Es wird auf das '=' gewartet.
+// Unterschied nr.2: wird ein Operant ausgewählt, so sieht man beim online Calculator farblich markiert die letzte Operanten Auswahl. 
     /**
      * Empfängt den Wert einer gedrückten binären Operationstaste, also eine der vier Operationen
      * Addition, Substraktion, Division, oder Multiplikation, welche zwei Operanden benötigen.
