@@ -15,6 +15,7 @@ public class Calculator {
     private String latestOperation = "";
 
     private boolean operatorJustPressed = false; 
+    
     private boolean clearPressedOnce = false;  
 
     /**
@@ -31,18 +32,27 @@ public class Calculator {
      * oder rechts an die zuvor gedrückte Ziffer angehängt angezeigt wird.
      * @param digit Die Ziffer, deren Taste gedrückt wurde
      */
-    public void pressDigitKey(int digit) {
-        if(digit > 9 || digit < 0) throw new IllegalArgumentException();
+    
+   public void pressDigitKey(int digit) {
+    if (digit > 9 || digit < 0) throw new IllegalArgumentException();
 
-        if (!screen.isEmpty() && (screen.equals("0") || latestValue == Double.parseDouble(screen))) {
-            screen = "";
-        }
-
-
-        clearPressedOnce = false;
-
-        screen = screen + digit;
+    // Wenn gerade ein Operator gedrückt wurde, neue Zahl beginnen
+    if (operatorJustPressed) {
+        screen = "";
+        operatorJustPressed = false;
     }
+
+    // Wenn auf dem Bildschirm "0" steht, überschreiben
+    if (screen.equals("0")) {
+        screen = "";
+    }
+
+    clearPressedOnce = false;
+
+    // Jetzt Zahl anhängen
+    screen = screen + digit;
+}
+
 
     /**
      * Empfängt den Befehl der C- bzw. CE-Taste (Clear bzw. Clear Entry).
@@ -82,12 +92,24 @@ public class Calculator {
      * auf dem Bildschirm angezeigt. Falls hierbei eine Division durch Null auftritt, wird "Error" angezeigt.
      * @param operation "+" für Addition, "-" für Substraktion, "x" für Multiplikation, "/" für Division
      */
-    public void pressBinaryOperationKey(String operation)  {
+
+public void pressBinaryOperationKey(String operation)  {
+    // Nur beim ersten Drücken eines Operators den aktuellen Bildschirmwert speichern
+    if (!operatorJustPressed) {
         latestValue = Double.parseDouble(screen);
-        latestOperation = operation;
-        operatorJustPressed = true;
-        clearPressedOnce = false;
     }
+
+    // Gewählte Operation speichern
+    latestOperation = operation;
+
+    // Merken, dass gerade ein Operator gedrückt wurde (damit beim nächsten Digit der Screen geleert wird)
+    operatorJustPressed = true;
+
+    // Clear-Status zurücksetzen
+    clearPressedOnce = false;
+}
+
+
 
     /**
      * Empfängt den Wert einer gedrückten unären Operationstaste, also eine der drei Operationen
@@ -148,12 +170,12 @@ public class Calculator {
             return; // keine Operation -> nichts tun
         }
 
-        // Überprüfung ob zwei Operatoren vorhanden sind.
-         if (latestOperation != null && latestValue == Double.parseDouble(screen)) {
-        
-        //Return trotz void methode --> geht weil return ein methode auch einfach beenden kann.
-        return;
-    }
+        // Wenn unmittelbar vorher ein Operator gedrückt wurde und noch keine neue Ziffer eingegeben wurde,
+        // dann fehlt der zweite Operand — nichts tun.
+            if (operatorJustPressed) {
+            return;
+        }
+
         var result = switch(latestOperation) {
             case "+" -> latestValue + Double.parseDouble(screen);
             case "-" -> latestValue - Double.parseDouble(screen);
